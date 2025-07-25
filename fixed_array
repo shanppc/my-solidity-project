@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.30;
+contract Arr{
+
+    uint[5] public Marks =[50,70,60,80,40];
+
+    function update_marks(uint _index, uint _marks) public {
+        Marks[_index] = _marks;}
+        
+        function Total() public view returns(uint){
+uint totalsum;
+
+for(uint i= 0; i<Marks.length; i ++) {
+    totalsum += Marks[i];
+}
+        return totalsum;}
+
+        function Average() public view returns(uint) {
+
+            return Total() / 5;
+        
+        }
+
+             
+
+    }
