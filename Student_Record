@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+contract StudentReg {
+    // 1. Enum Grade: A, B, C, D, F
+    enum Grade { A, B, C, D, F }
+
+    // 2. Struct Student: name, age, grade (enum)
+    struct Student {
+        string name;
+        uint age;
+        Grade grade;
+    }
+
+    // 3. Mapping: studentId (uint) => Student
+    mapping(uint => Student) public students;
+
+    // 4. Array: store all student IDs
+    uint[] public studentIds;
+
+    // Event for adding a student
+    event StudentAdded(uint indexed studentId, string name, uint age, Grade grade);
+    // Event for updating a grade
+    event GradeUpdated(uint indexed studentId, Grade newGrade);
+
+    // 5. Function: addStudent(uint _id, string memory _name, uint _age, Grade _grade)
+    function addStudent(uint _id, string memory _name, uint _age, Grade _grade) public {
+        require(bytes(students[_id].name).length == 0, "Student already exists");
+        studentIds.push(_id);
+        students[_id] = Student(_name, _age, _grade);
+        emit StudentAdded(_id, _name, _age, _grade);
+    }
+
+    // 6. Function: getStudent(uint _id) returns details
+    function getStudent(uint _id) public view returns (string memory, uint, Grade) {
+        require(bytes(students[_id].name).length != 0, "Student does not exist");
+        return (students[_id].name, students[_id].age, students[_id].grade);
+    }
+
+    // 7. Function: updateGrade(uint _id, Grade _newGrade)
+    function updateGrade(uint _id, Grade _newGrade) public {
+        require(bytes(students[_id].name).length != 0, "Student does not exist");
+        students[_id].grade = _newGrade;
+        emit GradeUpdated(_id, _newGrade);
+    }
+
+    // 8. Function: getTotalStudents() returns length of array
+    function getTotalStudents() public view returns (uint) {
+        return studentIds.length;
+    }
+
+    // 9. Function: getAllIds() returns the array
+    function getAllIds() public view returns (uint[] memory) {
+        return studentIds;
+    }
+}
